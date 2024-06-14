@@ -1,3 +1,5 @@
+#[warn(unused_imports)]
+
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -25,24 +27,32 @@ use std::io::prelude::*;
 //     date: f32,
 //}
 
+//Temp data to test with until json parser is working
 pub fn parse_task_data() -> Vec<(&'static str, &'static str)>{ 
 let task_list = vec![("Sleep", "Sleep"), ("Walk", "Stupid mental health walk")];
 task_list
 }
 
-fn create_save_file() -> std::io::Result<()> {
-    let mut file = File::create("wlb-task.json")?;
-    Ok(())
-}
+// fn create_task_file() -> std::io::Result<()> {
+//     let mut file = File::create("wlb-task.json")?;
+//     Ok((file))
+// }
 
-fn open_save_file() -> std::io::Result<()> {
-    let mut file = File::open("wlb-task.json")?;
-    match file {
-        Ok(x) -> file,
-        Err -> create_save_file(), 
-    }
+// fn open_task_file() -> std::io::Result<()> {
+//     let mut file = File::open("wlb-task.json")?;
+//     match file {
+//         Ok(x) => file,
+//         Err => file = create_task_file(), 
+//     }
 
-    Ok(())
-}
+//     Ok((file))
+// }
+
+
+// fn save_task_file(task_file: Vev<tasks>) -> std::io::Result<()> {
+//     let mut f = File::create_new("wlb-task.json")?;
+//     f.write_all(task_file)?;
+//     Ok(())
+// }
 
 
