@@ -1,4 +1,4 @@
-#[warn(unused_imports)]
+
 
 use clap::Parser;
 
@@ -14,7 +14,7 @@ mod parser;
 struct Args {
 //Todo: Add edit arg to edit task_data json file with text editor
 //Todo: Add args to get task percetages for the week, month, year, ytd from historic task_data json file
-
+//Todo: Add args to add task and review task lists 
 }
 
 
