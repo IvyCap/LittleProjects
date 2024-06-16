@@ -1,31 +1,27 @@
-#[warn(unused_imports)]
+#[warn(dead_code)]
 
 use std::fs::File;
 use std::io::prelude::*;
+use std::path::Path;
 
+// TODO: Add serde to serilze and deserialize JSON files with task data. 
 
-// TODO: Add serde to serilze and ddeserialize JSON files with task data. 
-
-
-// const SLEEP: &str = "Sleep";
-// const WALK: &str = "Stupid Mental Health Walk";
-// const EXCER: &str = "Excersice";
-// const HOBBY: &str = "Hobbies";
-// const LEARN: &str = "Learn/Study";
-// const RELAX: &str = "Relax";
-// const WORKSELF: &str = "Work for self";
-// const WORKCAP: &str = "Work for the capatilists";
-
-// pub struct  tasks {
+// pub struct  Tasks {
 //     short_name: &str,
 //     long_name: &str,
-//     records: Vec<time_record>,
+// 
+
+// pub struct RecordByDate {
+//     date: f32,
+//     task_records: Vec<TaskRecord>
 // }
 
-// pub struct time_record {
+// pub struct TaskRecord {
+//     short_name: &str
 //     hours: f32,
-//     date: f32,
-//}
+
+const TASK_PATH: &str = "./taskData.json";
+
 
 //Temp data to test with until json parser is working
 pub fn parse_task_data() -> Vec<(&'static str, &'static str)>{ 
@@ -33,26 +29,53 @@ let task_list = vec![("Sleep", "Sleep"), ("Walk", "Stupid mental health walk")];
 task_list
 }
 
-// fn create_task_file() -> std::io::Result<()> {
-//     let mut file = File::create("wlb-task.json")?;
-//     Ok((file))
-// }
+fn does_file_exist() -> std::io::Result<String> {
+    let path = Path::new(TASK_PATH);
 
-// fn open_task_file() -> std::io::Result<()> {
-//     let mut file = File::open("wlb-task.json")?;
-//     match file {
-//         Ok(x) => file,
-//         Err => file = create_task_file(), 
-//     }
+    if !Path::exists(path){
+        _ = create_task_file();
+    };
 
-//     Ok((file))
-// }
+    let file = open_task_file(TASK_PATH);
+
+    file
+}
+
+fn create_task_file() -> std::io::Result<()> {
+    let file = File::create(TASK_PATH);
+
+    match file {
+        Ok(f) => f,
+        Err(error) => {panic!("Error: {:?}", error)}, 
+    };
+
+    Ok(())
+}
+
+fn open_task_file(path: &str) -> std::io::Result<String> {
+    let file = File::open(path);
+
+    let mut file = match file {
+        Ok(f) => f,
+        Err(error) => {panic!("Error: {:?}", error)}, 
+    };
+
+    dbg!("File: {:?}", &file);
+
+    let mut contents = String::new();
+    let contents =  match file.read_to_string(&mut contents){
+        Ok(_) => contents,
+        Err(error) => {panic!("Error: {:?}", error)}, 
+    };
+
+    dbg!("Contents: {}", &contents);
+
+    Ok(contents)
+}
 
 
-// fn save_task_file(task_file: Vev<tasks>) -> std::io::Result<()> {
-//     let mut f = File::create_new("wlb-task.json")?;
-//     f.write_all(task_file)?;
-//     Ok(())
-// }
-
-
+fn save_task_file(path: &str) -> std::io::Result<()> {
+    let mut f = File::open(path)?;
+    f.write_all(b"test text")?;
+    Ok(())
+}

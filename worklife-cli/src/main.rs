@@ -1,4 +1,4 @@
-
+#[warn(dead_code)]
 
 use clap::Parser;
 
