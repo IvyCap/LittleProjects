@@ -3,17 +3,21 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use serde::{Deserialize, Serialize};
 
+// #[derive(Serialize, Deserialize)]
 // pub struct  Tasks {
 //     short_name: &str,
 //     long_name: &str,
-// 
+// }
 
+// #[derive(Serialize, Deserialize)]
 // pub struct RecordByDate {
 //     date: f32,
 //     task_records: Vec<TaskRecord>
 // }
 
+// #[derive(Serialize, Deserialize)]
 // pub struct TaskRecord {
 //     short_name: &str
 //     hours: f32,
@@ -25,8 +29,6 @@ const TASK_PATH: &str = "./test.txt";
 fn main() {
     
     _ = does_file_exist();
-
-    // let _ = create_task_file();
 
     let test = open_task_file(TASK_PATH).unwrap();
 

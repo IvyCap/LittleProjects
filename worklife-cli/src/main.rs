@@ -1,6 +1,5 @@
-#[warn(dead_code)]
-
 use clap::Parser;
+
 
 use crate::logic::*;
 use crate::parser::*;
