@@ -13,7 +13,7 @@ pub fn app_title(){
 }
 
 
-fn ask_hours(task: &str) -> f32 {
+fn ask_hours(task: String) -> f32 {
     print!("{}: ", task);
     stdout().flush().unwrap();
 
@@ -37,7 +37,7 @@ fn percent_calc(task_time: f32, num_days: f32) -> f32 {
 
 }
 
-pub fn get_times<'a>(tasks: Vec<(&'a str, &'a str)>) -> Vec<(&'a str, f32)>{
+pub fn get_times(tasks: Vec<(String, String)>) -> Vec<(String, f32)>{
     let mut task_time = vec![];
     let mut total_time: f32 = 0.0 ;
     println!("Enter in how many hours have you spent on these tasks in the last 24 hours.");
@@ -60,13 +60,13 @@ pub fn get_times<'a>(tasks: Vec<(&'a str, &'a str)>) -> Vec<(&'a str, f32)>{
         println!("NOTICE:");
         println!("Total hours are less than 24 hours.");
         let unused_time = HOURSDAY - total_time;
-        let unused_name_time = ("Undocumented Time", unused_time);
+        let unused_name_time = ("Undocumented Time".to_string(), unused_time);
         task_time.push(unused_name_time);
     }
     task_time
 }
 
-pub fn print_tasks_percent(titles_times: Vec<(&str, f32)>) {
+pub fn print_tasks_percent(titles_times: Vec<(String, f32)>) {
     println!("");
     println!("{}", "Task Percentages for the Day".cyan());
 

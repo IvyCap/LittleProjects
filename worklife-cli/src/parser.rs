@@ -1,6 +1,14 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
+use serde::{Deserialize, Serialize};
+use serde_json::Result;
+
+#[derive(Serialize, Deserialize)]
+pub struct  Tasks{
+    pub tasks: Vec<(String, String)>,
+}
+
 
 // TODO: Add serde to serilze and deserialize JSON files with task data. 
 
@@ -22,9 +30,33 @@ const TASK_PATH: &str = "./taskData.json";
 
 
 //Temp data to test with until json parser is working
-pub fn parse_task_data() -> Vec<(&'static str, &'static str)>{ 
-let task_list = vec![("Sleep", "Sleep"), ("Walk", "Stupid mental health walk")];
-task_list
+// pub fn parse_task_data() -> Vec<(&'static str, &'static str)>{ 
+// let task_list = vec![("Sleep", "Sleep"), ("Walk", "Stupid mental health walk")];
+// task_list
+// }
+
+pub fn parse_task_data() -> Vec<(String, String)>{ 
+    
+    _ = does_file_exist();
+
+    let tasks_json: String= open_task_file(TASK_PATH).unwrap();
+
+    let v: Tasks = json_to_struc_tasks(tasks_json.as_str()).unwrap();
+
+    let mut task_list: Vec<(String, String)> = vec!();
+
+    for task in v.tasks {
+        println!("{:?}", task);
+        task_list.push(task)
+    }
+
+
+    task_list
+    }
+
+fn json_to_struc_tasks(tasks: &str) -> Result<Tasks>{
+    let v: Tasks = serde_json::from_str(tasks)?;
+    Ok(v)
 }
 
 fn does_file_exist() -> std::io::Result<String> {

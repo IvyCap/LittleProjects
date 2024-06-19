@@ -1,14 +1,18 @@
-#[warn(dead_code)]
-
 use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use serde::{Deserialize, Serialize};
+use serde_json::{Result, Value};
+
+#[derive(Serialize, Deserialize)]
+pub struct  Tasks{
+    tasks: Vec<(String, String)>,
+}
 
 // #[derive(Serialize, Deserialize)]
-// pub struct  Tasks {
-//     short_name: &str,
-//     long_name: &str,
+// pub struct  Task<'a> {
+//     short_name: &'a str,
+//     long_name: &'a str,
 // }
 
 // #[derive(Serialize, Deserialize)]
@@ -22,17 +26,30 @@ use serde::{Deserialize, Serialize};
 //     short_name: &str
 //     hours: f32,
 
-const TASK_PATH: &str = "./test.txt";
+const TASK_PATH: &str = "./test.json";
 
 
 
-fn main() {
+fn main() -> Result<()>{
     
     _ = does_file_exist();
 
     let test = open_task_file(TASK_PATH).unwrap();
 
-    println!("Test: {}", test);
+    // let tasks = Tasks::new(test);
+
+    let v: Tasks = serde_json::from_str(&test)?;
+
+    println!("");
+    println!("");
+    // println!("Test: {}", v);
+
+
+    for task in v.tasks {
+        println!("{:?}", task);
+            }
+
+    Ok(())
 }
 
 
