@@ -48,12 +48,10 @@ pub fn parse_task_data() -> Vec<(String, String)> {
     task_list
 }
 
-pub fn save_task_time(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
+pub fn save_task_time(task_times: Vec<(String, f32)>) {
     _ = does_file_exist(TASKTIMEPATH);
 
     _ = write_save_file(task_times);
-
-    Ok(())
 }
 
 fn write_save_file(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
@@ -106,8 +104,8 @@ fn write_task_data(tasks_data: Vec<(String, String)>) -> std::io::Result<()> {
 }
 
 fn json_to_struct_tasks(tasks: &str) -> Tasks {
-    let v: Tasks = match serde_json::from_str(tasks) { 
-        Err(why) => panic!("couldn't deserialize from String to Tasks struct {}",  why),
+    let v: Tasks = match serde_json::from_str(tasks) {
+        Err(why) => panic!("couldn't deserialize from String to Tasks struct {}", why),
         Ok(file) => file,
     };
 
@@ -116,7 +114,10 @@ fn json_to_struct_tasks(tasks: &str) -> Tasks {
 
 fn json_to_struct_task_records(tasks: &str) -> TaskRecords {
     let v: TaskRecords = match serde_json::from_str(tasks) {
-        Err(why) => panic!("couldn't deserialize from String to TaskRecord struct: {}",  why),
+        Err(why) => panic!(
+            "couldn't deserialize from String to TaskRecord struct: {}",
+            why
+        ),
         Ok(file) => file,
     };
 
@@ -125,7 +126,7 @@ fn json_to_struct_task_records(tasks: &str) -> TaskRecords {
 
 fn struct_tasks_to_json(struct_t: Tasks) -> String {
     let v: String = match serde_json::to_string(&struct_t) {
-        Err(why) => panic!("couldn't serialize from Tasks struct to String: {}",  why),
+        Err(why) => panic!("couldn't serialize from Tasks struct to String: {}", why),
         Ok(file) => file,
     };
 
@@ -134,7 +135,10 @@ fn struct_tasks_to_json(struct_t: Tasks) -> String {
 
 fn struct_task_records_to_json(struct_tr: TaskRecords) -> String {
     let v: String = match serde_json::to_string(&struct_tr) {
-        Err(why) => panic!("couldn't serialize from TaskRecord struct to String: {}",  why),
+        Err(why) => panic!(
+            "couldn't serialize from TaskRecord struct to String: {}",
+            why
+        ),
         Ok(file) => file,
     };
 

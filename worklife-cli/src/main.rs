@@ -1,23 +1,22 @@
-use clap::Parser;
-
+use crate::args::*;
 use crate::logic::*;
 use crate::parser::*;
 
+mod args;
 mod logic;
 mod parser;
 
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
-struct Args {
-    //Todo: Add edit arg to edit task_data json file with text editor
-    //Todo: Add args to get task percetages for the week, month, year, ytd from historic task_data json file
-    //Todo: Add args to add task and review task lists
+fn main() {
+    let matches: clap::ArgMatches = cmd_args();
+
+    match matches.subcommand_name() {
+        Some("task") => task_cmd(),
+        Some("review") => review_cmd(),
+        _ => default_cmd(),
+    };
 }
 
-fn main() {
-    //This allows Clap to run with help and version args without needing to configure or use other arguments
-    let _args = Args::parse();
-
+fn default_cmd() {
     let task_data = parse_task_data();
 
     app_title();
@@ -27,4 +26,12 @@ fn main() {
     print_tasks_percent(&task_times);
 
     save_task_time(task_times);
+}
+
+fn task_cmd() {
+    println!("Task command")
+}
+
+fn review_cmd() {
+    println!("Review command")
 }
