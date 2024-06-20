@@ -34,9 +34,9 @@ const TASKTIMEPATH: &str = "./taskTimeData.json";
 pub fn parse_task_data() -> Vec<(String, String)> {
     _ = does_file_exist(TASKPATH);
 
-    let tasks_json: String = open_file(TASKPATH).unwrap();
+    let tasks_json: String = open_file(TASKPATH);
 
-    let v: Tasks = json_to_struct_tasks(tasks_json.as_str()).unwrap();
+    let v: Tasks = json_to_struct_tasks(tasks_json.as_str());
 
     let mut task_list: Vec<(String, String)> = vec![];
 
@@ -57,8 +57,8 @@ pub fn save_task_time(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
 }
 
 fn write_save_file(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
-    let mut file = open_file(TASKTIMEPATH).unwrap();
-    let saved_struct: TaskRecords = json_to_struct_task_records(&file.as_str()).unwrap();
+    let file = open_file(TASKTIMEPATH);
+    let saved_struct: TaskRecords = json_to_struct_task_records(&file.as_str());
     // dbg!("Write File Path: {}", &file);
     // dbg!("Saved Struct: {}", &saved_struct);
 
@@ -82,7 +82,7 @@ fn write_save_file(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
 
     // dbg!("Updated Struct: {}", &updated_struct);
 
-    let new_json = struct_task_records_to_json(updated_struct).unwrap();
+    let new_json = struct_task_records_to_json(updated_struct);
 
     let mut write_file = create_file(TASKTIMEPATH);
 
@@ -92,7 +92,7 @@ fn write_save_file(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
 }
 
 fn write_task_data(tasks_data: Vec<(String, String)>) -> std::io::Result<()> {
-    let mut file: Tasks = json_to_struct_tasks(open_file(TASKPATH).unwrap().as_str()).unwrap();
+    let mut file: Tasks = json_to_struct_tasks(open_file(TASKPATH).as_str());
 
     // dbg!("Write Read: {}", &file);
 
@@ -105,27 +105,43 @@ fn write_task_data(tasks_data: Vec<(String, String)>) -> std::io::Result<()> {
     Ok(())
 }
 
-fn json_to_struct_tasks(tasks: &str) -> Result<Tasks> {
-    let v: Tasks = serde_json::from_str(tasks)?;
-    Ok(v)
+fn json_to_struct_tasks(tasks: &str) -> Tasks {
+    let v: Tasks = match serde_json::from_str(tasks) { 
+        Err(why) => panic!("couldn't deserialize from String to Tasks struct {}",  why),
+        Ok(file) => file,
+    };
+
+    v
 }
 
-fn json_to_struct_task_records(tasks: &str) -> Result<TaskRecords> {
-    let v: TaskRecords = serde_json::from_str(tasks)?;
-    Ok(v)
+fn json_to_struct_task_records(tasks: &str) -> TaskRecords {
+    let v: TaskRecords = match serde_json::from_str(tasks) {
+        Err(why) => panic!("couldn't deserialize from String to TaskRecord struct: {}",  why),
+        Ok(file) => file,
+    };
+
+    v
 }
 
-fn struct_tasks_to_json(struct_t: Tasks) -> Result<String> {
-    let v: String = serde_json::to_string(&struct_t)?;
-    Ok(v)
+fn struct_tasks_to_json(struct_t: Tasks) -> String {
+    let v: String = match serde_json::to_string(&struct_t) {
+        Err(why) => panic!("couldn't serialize from Tasks struct to String: {}",  why),
+        Ok(file) => file,
+    };
+
+    v
 }
 
-fn struct_task_records_to_json(struct_tr: TaskRecords) -> Result<String> {
-    let v: String = serde_json::to_string(&struct_tr)?;
-    Ok(v)
+fn struct_task_records_to_json(struct_tr: TaskRecords) -> String {
+    let v: String = match serde_json::to_string(&struct_tr) {
+        Err(why) => panic!("couldn't serialize from TaskRecord struct to String: {}",  why),
+        Ok(file) => file,
+    };
+
+    v
 }
 
-fn does_file_exist(file_path: &str) -> std::io::Result<String> {
+fn does_file_exist(file_path: &str) -> String {
     let path = Path::new(file_path);
 
     if !Path::exists(path) {
@@ -138,7 +154,7 @@ fn does_file_exist(file_path: &str) -> std::io::Result<String> {
 }
 
 fn create_file(file_path: &str) -> File {
-    let mut file = match File::create(&file_path) {
+    let file = match File::create(&file_path) {
         Err(why) => panic!("couldn't create {}: {}", &file_path, why),
         Ok(file) => file,
     };
@@ -146,7 +162,7 @@ fn create_file(file_path: &str) -> File {
     file
 }
 
-fn open_file(path: &str) -> std::io::Result<String> {
+fn open_file(path: &str) -> String {
     let file = File::open(path);
 
     let mut file = match file {
@@ -168,5 +184,5 @@ fn open_file(path: &str) -> std::io::Result<String> {
 
     // dbg!("Contents: {}", &contents);
 
-    Ok(contents)
+    contents
 }
