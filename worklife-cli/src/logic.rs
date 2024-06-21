@@ -88,3 +88,13 @@ pub fn print_tasks_percent(titles_times: &Vec<(String, f32)>) {
         );
     }
 }
+
+pub fn print_tasks_list(task_list: &Vec<(String, String)>) {
+    println!("");
+    println!("{}", "Task List".bold().cyan());
+
+    for task in task_list {
+        println!("{}: {}", task.0.bright_blue(), task.1.blue());
+    }
+    println!("");
+}

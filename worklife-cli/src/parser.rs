@@ -48,13 +48,30 @@ pub fn parse_task_data() -> Vec<(String, String)> {
     task_list
 }
 
+pub fn parse_task_time_data() -> Vec<(String, f32)> {
+    _ = does_file_exist(TASKTIMEPATH);
+
+    let task_time_data_json: String = open_file(TASKTIMEPATH);
+
+    let v: TaskRecords = json_to_struct_task_records(task_time_data_json.as_str());
+
+    let mut task_time_list: Vec<(String, f32)> = vec![];
+
+    for time in v.times {
+        // println!("{:?}", task);
+        task_time_list.push(time)
+    }
+
+    task_time_list
+}
+
 pub fn save_task_time(task_times: Vec<(String, f32)>) {
     _ = does_file_exist(TASKTIMEPATH);
 
     _ = write_save_file(task_times);
 }
 
-fn write_save_file(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
+fn write_save_file(task_times: Vec<(String, f32)>) {
     let file = open_file(TASKTIMEPATH);
     let saved_struct: TaskRecords = json_to_struct_task_records(&file.as_str());
     // dbg!("Write File Path: {}", &file);
@@ -84,9 +101,10 @@ fn write_save_file(task_times: Vec<(String, f32)>) -> std::io::Result<()> {
 
     let mut write_file = create_file(TASKTIMEPATH);
 
-    write_file.write_all(new_json.as_bytes())?;
-
-    Ok(())
+    match write_file.write_all(new_json.as_bytes()) {
+        Err(why) => panic!("couldn't deserialize from String to Tasks struct {}", why),
+        Ok(()) => println!("Saved new task times"),
+    };
 }
 
 fn write_task_data(tasks_data: Vec<(String, String)>) -> std::io::Result<()> {

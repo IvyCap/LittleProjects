@@ -1,9 +1,9 @@
-/home/ivycap/Documents/Projects/LittleProjects/worklife-cli/target/debug/deps/libwlb_cli-631bb3e88c5f90ef.rmeta: src/main.rs src/args.rs src/logic.rs src/parser.rs
+/home/ivycap/Documents/Projects/LittleProjects/worklife-cli/target/debug/deps/libwlb_cli-631bb3e88c5f90ef.rmeta: src/main.rs src/cmd_args.rs src/logic.rs src/parser.rs
 
-/home/ivycap/Documents/Projects/LittleProjects/worklife-cli/target/debug/deps/wlb_cli-631bb3e88c5f90ef.d: src/main.rs src/args.rs src/logic.rs src/parser.rs
+/home/ivycap/Documents/Projects/LittleProjects/worklife-cli/target/debug/deps/wlb_cli-631bb3e88c5f90ef.d: src/main.rs src/cmd_args.rs src/logic.rs src/parser.rs
 
 src/main.rs:
-src/args.rs:
+src/cmd_args.rs:
 src/logic.rs:
 src/parser.rs:
 

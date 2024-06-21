@@ -1,37 +1,18 @@
-use crate::args::*;
+use crate::cmd_args::*;
 use crate::logic::*;
-use crate::parser::*;
 
-mod args;
+mod cmd_args;
 mod logic;
 mod parser;
 
 fn main() {
-    let matches: clap::ArgMatches = cmd_args();
-
-    match matches.subcommand_name() {
-        Some("task") => task_cmd(),
-        Some("review") => review_cmd(),
-        _ => default_cmd(),
-    };
-}
-
-fn default_cmd() {
-    let task_data = parse_task_data();
+    let matches: clap::ArgMatches = subcmd_args().get_matches();
 
     app_title();
 
-    let task_times: Vec<(String, f32)> = get_times(task_data);
-
-    print_tasks_percent(&task_times);
-
-    save_task_time(task_times);
-}
-
-fn task_cmd() {
-    println!("Task command")
-}
-
-fn review_cmd() {
-    println!("Review command")
+    match matches.subcommand() {
+        Some(("task", sub_matches)) => task_cmd(sub_matches),
+        Some(("review", sub_matches)) => review_cmd(sub_matches),
+        _ => default_cmd(),
+    };
 }
